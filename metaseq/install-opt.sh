@@ -9,7 +9,7 @@ set -o pipefail
 source nccl-env-var.sh
 
 INSTALL_DIR=${INSTALL_DIR-${HOME}}
-SRC_DIR=`readlink -f .`
+SRC_DIR=$(readlink -f .)
 
 printf "Downloading and installing software in ${INSTALL_DIR}"
 pushd $INSTALL_DIR
@@ -28,7 +28,7 @@ pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable
 printf "Installing Apex"
 git clone https://github.com/NVIDIA/apex
 pushd apex
-# Avoid CUDA extension + Pytorch complaint.  This is fine for CUDA 11.3 vs. 11.4
+# Avoid CUDA extension + Pytorch complaint.  This is usually fine.
 sed -i "s/check_cuda_torch_binary_vs_bare_metal(CUDA_HOME)//g" setup.py
 python -m pip install -v --no-cache-dir --global-option="--cpp_ext" \
     --global-option="--cuda_ext" \
